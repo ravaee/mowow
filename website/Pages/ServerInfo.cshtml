@@ -1,0 +1,36 @@
+@* @page
+@model ServerInfoPageModel
+@{
+    ViewData["Title"] = "Detailed Server Info";
+}
+
+<h2>Detailed Server Info</h2>
+
+<form method="post" class="mb-3">
+    <button class="btn btn-primary" type="submit">Refresh</button>
+</form>
+
+@if (Model.ServerInfo != null)
+{
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card p-3">
+                <p><strong>Connected Players:</strong> @Model.ServerInfo.ConnectedPlayers</p>
+                <p><strong>Characters in World:</strong> @Model.ServerInfo.CharactersInWorld</p>
+                <p><strong>Connection Peak:</strong> @Model.ServerInfo.ConnectionPeak</p>
+                <p><strong>Uptime:</strong> @Model.ServerInfo.Uptime</p>
+            </div>
+            <div class="card p-3 text-start">
+                <h5 class="mb-3">Server Stats</h5>
+                <p><strong>Connected Players:</strong> @Model.ServerInfo.ConnectedPlayers</p>
+                <p><strong>Characters in World:</strong> @Model.ServerInfo.CharactersInWorld</p>
+                <p><strong>Connection Peak:</strong> @Model.ServerInfo.ConnectionPeak</p>
+                <p><strong>Uptime:</strong> @Model.ServerInfo.Uptime</p>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <p>No data loaded.</p>
+} *@

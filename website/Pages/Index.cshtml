@@ -1,0 +1,56 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "AzerothCore Server Dashboard";
+}
+
+<div class="text-center">
+    <h1 class="display-4 mb-4">AzerothCore Live Dashboard</h1>
+
+    <div class="alert alert-info">
+        <h5>Realmlist Info</h5>
+        <p>Set your <code>realmlist.wtf</code> to:</p>
+        <pre>set realmlist @Model.RealmAddress</pre>
+    </div>
+
+    <div class="row justify-content-center my-4">
+        <div class="col-md-4">
+            <div class="card p-3">
+                <h5>Server Stats</h5>
+                <p><strong>Online Players:</strong> @Model.ServerInfo?.ConnectedPlayers</p>
+                <p><strong>Uptime:</strong> @Model.ServerInfo?.Uptime</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3">
+                <h5>Faction Distribution</h5>
+                <p><strong>Horde:</strong> @Model.FactionStats?.HordePlayers</p>
+                <p><strong>Alliance:</strong> @Model.FactionStats?.AlliancePlayers</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center my-4">
+        <div class="col-md-8">
+            <div class="card p-3">
+                <h5>Last Boss Kill</h5>
+                @if (Model.LastBossKill != null)
+                {
+                    <p><strong>Player:</strong> @Model.LastBossKill.CharacterName</p>
+                    <p><strong>Boss/Achievement:</strong> @Model.LastBossKill.AchievementName</p>
+                    <p><strong>Date:</strong> @Model.LastBossKill.Date</p>
+                }
+                else
+                {
+                    <p>No boss kills yet.</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-5">
+        <a class="btn btn-success mx-2" asp-page="/Register">Register Account</a>
+        <a class="btn btn-outline-primary mx-2" asp-page="/ServerInfo">Server Info</a>
+    </div>
+</div>

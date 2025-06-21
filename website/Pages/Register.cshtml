@@ -1,0 +1,32 @@
+@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h2>Register New Account</h2>
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <div class="alert alert-success">@Model.SuccessMessage</div>
+}
+else
+{
+    <form method="post" class="mt-4">
+        <div class="mb-3">
+            <label>Email</label>
+            <input type="email" asp-for="Email" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label>Password</label>
+            <input type="password" asp-for="Password" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label>Confirm Password</label>
+            <input type="password" asp-for="ConfirmPassword" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-success">Register</button>
+    </form>
+}
+
+<partial name="_ValidationScriptsPartial" />
