@@ -1,0 +1,29 @@
+# Ignore build output and binaries
+**/bin/
+**/obj/
+*.exe
+*.dll
+*.pdb
+*.cache
+*.log
+*.user
+*.vs/
+*.suo
+*.db
+*.DS_Store
+*.vscode/
+# Ignore publish output
+**/publish/
+# Ignore test results
+**/TestResults/
+# Ignore other common files
+*.nupkg
+*.snk
+*.swp
+*.bak
+*.tmp
+# Ignore Rider and VS Code settings
+.idea/
+.vscode/
+# Ignore local secrets
+secrets.json
