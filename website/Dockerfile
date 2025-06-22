@@ -3,13 +3,13 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copy solution and restore as distinct layers
-COPY website/website.sln ./website.sln
-COPY website/*.csproj ./website/
-RUN dotnet restore ./website/website.sln
+COPY website.sln ./website.sln
+COPY *.csproj ./
+RUN dotnet restore ./website.sln
 
 # Copy everything else and build
-COPY website/. ./website/
-WORKDIR /src/website
+COPY . .
+WORKDIR /src
 RUN dotnet publish -c Release -o /app --no-restore
 
 # Build runtime image
