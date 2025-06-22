@@ -8,6 +8,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<SiteUserService>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<CharacterStatisticsService>();
+builder.Services.AddScoped<CharacterService>();
+
 builder.Services.AddHttpClient<AzerothCoreSoapClient>();
 
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);

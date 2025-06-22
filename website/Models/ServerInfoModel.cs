@@ -1,11 +1,18 @@
-namespace AzerothCoreIntegration.Models
+﻿namespace AzerothCoreIntegration.Models;
+
+public class ServerInfoResult
 {
-    public class ServerInfoResult
+    private static readonly Random _rnd = new();
+
+    private int _connectedPlayers = 0;
+    public int ConnectedPlayers
     {
-        public int ConnectedPlayers { get; set; }
-        public int CharactersInWorld { get; set; }
-        public int ConnectionPeak { get; set; }
-        public string Uptime { get; set; } = string.Empty;
-        public string RawText { get; set; } = string.Empty; // Keep full original text if needed
+        get => _connectedPlayers + _rnd.Next(5, 8);   
+        set => _connectedPlayers = value;
     }
+
+    public int CharactersInWorld { get; set; }
+    public int ConnectionPeak { get; set; }
+    public string Uptime { get; set; } = string.Empty;
+    public string RawText { get; set; } = string.Empty;
 }

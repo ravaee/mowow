@@ -1,68 +1,433 @@
-html {
-  font-size: 14px;
+﻿/*==========================================================================================
+  IMPORT FONTS & GLOBAL RESET
+==========================================================================================*/
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap');
+
+:root {
+    --bg-dark: #101010;
+    /* glass tints */
+    --glass: rgba(30,30,40,0.25); /* standard panels            */
+    --glass-hero: rgba( 0, 0, 0,0.25); /* hero panel – lighter tint  */
+    --glass-dark: rgba( 0, 0, 0,0.40); /* detail rows                */
+    /* brand colours */
+    --text-light: #eee;
+    --text-muted: #aaa;
+    --gold: #e8b100;
+    --gold-dark: #c99700;
+    --green: #28a745;
+    --border-light: rgba(255,255,255,0.15);
+    --shadow-dark: rgba(0,0,0,0.6);
+    --font-serif: 'Cinzel',serif;
+    --font-sans: 'Montserrat',sans-serif;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+*, *::before, *::after {
+    box-sizing: border-box
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  margin-bottom: 60px;
-}
-
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+html, body {
+    margin: 0;
+    height: 100%;
+    background: url('/images/header.jpg') fixed center/cover no-repeat;
+    color: var(--text-light);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
 }
 
 a {
-  color: #0077cc;
+    color: var(--gold);
+    text-decoration: none
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    a:hover {
+        text-decoration: underline
+    }
+
+/*==========================================================================================
+  NAVBAR
+==========================================================================================*/
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: transparent !important;
+    padding: .75rem 1rem;
+    transition: background .3s;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    .navbar.scrolled {
+        background: rgba(0,0,0,.65) !important
+    }
+
+.navbar-brand img {
+    height: 50px
 }
 
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+.navbar-nav .nav-link {
+    margin: 0 .4rem;
+    padding: .5rem .85rem;
+    border-radius: 8px;
+    background: rgba(255,255,255,.05);
+    color: var(--text-light) !important;
+    transition: background .2s,transform .12s;
 }
 
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+    .navbar-nav .nav-link:hover {
+        background: rgba(255,255,255,.13);
+        transform: translateY(-1px);
+    }
+
+/* CTA buttons ------------------------------------------------------------*/
+.nav-item.register .nav-link,
+.hero-btn.register,
+.btn-gold {
+    background: transparent;
+    border: 2px solid var(--gold);
+    color: var(--gold) !important;
+    font-weight: 600
 }
 
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
+    .nav-item.register .nav-link:hover,
+    .hero-btn.register:hover,
+    .btn-gold:hover {
+        background: var(--gold);
+        color: var(--bg-dark) !important;
+    }
+
+.nav-item.login .nav-link,
+.hero-btn.login,
+.btn-green {
+    background: var(--green);
+    border: 2px solid var(--green);
+    color: #fff !important;
+    font-weight: 600
 }
+
+    .nav-item.login .nav-link:hover,
+    .hero-btn.login:hover,
+    .btn-green:hover {
+        background: #208438;
+        border-color: #208438;
+    }
+
+.navbar-toggler {
+    border-color: var(--text-light)
+}
+
+.navbar-toggler-icon {
+    filter: invert(1)
+}
+
+/*==========================================================================================
+  UNIVERSAL GLASS PANEL
+==========================================================================================*/
+.glass {
+    background: var(--glass);
+    border: 1px solid var(--border-light);
+    border-radius: 14px;
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    padding: 1.75rem;
+    margin: 1.4rem auto;
+    width: 90%;
+    max-width: 1100px;
+    box-shadow: 0 6px 18px var(--shadow-dark);
+}
+
+/*==========================================================================================
+  HERO
+==========================================================================================*/
+.hero {
+    height: 300px;
+    position: relative;
+    margin: 0
+}
+
+    .hero .glass {
+        background: var(--glass-hero);
+        width: 90%;
+        max-width: 900px;
+        text-align: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    }
+
+    .hero h1 {
+        font-family: var(--font-serif);
+        color: #fff;
+        margin: .3rem 0;
+        text-shadow: 2px 2px 8px rgba(0,0,0,.9)
+    }
+
+    .hero p.lead {
+        color: rgba(255,255,255,.9);
+        line-height: 1.45;
+        margin: .6rem 0 1.3rem;
+    }
+
+.hero-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap
+}
+
+    .hero-links a {
+        flex: 1 1 160px;
+        padding: .8rem 1rem;
+        border-radius: 8px;
+        transition: transform .2s
+    }
+
+        .hero-links a:hover {
+            transform: translateY(-3px)
+        }
+
+/*==========================================================================================
+  SECTIONS (characters + stats)
+==========================================================================================*/
+.characters-section, .stats-section {
+    margin: 0
+}
+
+    .characters-section .glass, .stats-section .glass {
+        margin-top: 2.4rem
+    }
+
+/*==========================================================================================
+  STATS GRID
+==========================================================================================*/
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+    gap: 1.2rem;
+    margin-top: 1rem;
+}
+
+.stat-item {
+    background: var(--glass);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    backdrop-filter: blur(14px) saturate(160%);
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 6px var(--shadow-dark);
+}
+
+    .stat-item h6 {
+        font-family: var(--font-serif);
+        color: var(--gold);
+        margin: .35rem 0
+    }
+
+    .stat-item p {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0
+    }
+
+/*==========================================================================================
+  GLASS TABLE (Characters)
+==========================================================================================*/
+.glass-table {
+    background: var(--glass);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    backdrop-filter: blur(14px) saturate(160%);
+    padding: 1rem;
+    margin: 1.3rem auto;
+    width: 90%;
+    max-width: 1100px;
+}
+
+    .glass-table table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0
+    }
+
+    .glass-table thead th {
+        background: var(--glass);
+        color: var(--gold);
+        border-bottom: 2px solid var(--gold);
+        font-family: var(--font-serif);
+        text-transform: uppercase;
+        padding: .75rem;
+        position: sticky;
+        top: 0
+    }
+
+    .glass-table tbody td {
+        padding: .75rem;
+        vertical-align: middle;
+        color: #eee
+    }
+
+    .glass-table tbody tr:nth-child(odd) {
+        background: rgba(255,255,255,.05)
+    }
+
+    .glass-table tbody tr:hover {
+        background: rgba(255,255,255,.12)
+    }
+
+    .glass-table tr.collapse {
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity .3s,transform .3s
+    }
+
+        .glass-table tr.collapse.show {
+            opacity: 1;
+            transform: none
+        }
+
+.glass-detail {
+    background: var(--glass-dark);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 1rem;
+    margin: .65rem 0;
+    backdrop-filter: blur(12px) saturate(160%)
+}
+
+    .glass-detail h6 {
+        font-family: var(--font-serif);
+        color: var(--gold);
+        text-transform: uppercase;
+        font-size: 1rem;
+        margin-bottom: .5rem
+    }
+
+    .glass-detail ul {
+        list-style: disc inside;
+        margin: 0;
+        padding: 0
+    }
+
+    .glass-detail li {
+        font-size: .9rem;
+        margin-bottom: .25rem;
+        color: #eee
+    }
+
+/* avatars + row btn */
+.avatar-sm {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px var(--shadow-dark);
+    margin-right: .5rem
+}
+
+.btn-details {
+    border: 2px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    padding: .4rem .85rem;
+    border-radius: 8px;
+    font-size: .9rem;
+    font-weight: 600;
+    transition: background .25s,color .25s
+}
+
+    .btn-details:hover {
+        background: var(--gold);
+        color: var(--bg-dark)
+    }
+
+/*==========================================================================================
+  RELATED TOPICS
+==========================================================================================*/
+.related-topics {
+    background: var(--glass);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    backdrop-filter: blur(14px) saturate(160%);
+    padding: 1.55rem;
+    margin: 1.4rem auto;
+    width: 90%;
+    max-width: 1100px
+}
+
+    .related-topics h5 {
+        font-family: var(--font-serif);
+        color: var(--gold);
+        margin-bottom: 1rem
+    }
+
+    .related-topics a {
+        display: inline-block;
+        margin: .5rem .9rem .5rem 0;
+        color: #eee;
+        border: 1px solid var(--gold);
+        padding: .45rem .9rem;
+        border-radius: 6px;
+        transition: background .25s,color .25s
+    }
+
+        .related-topics a:hover {
+            background: var(--gold);
+            color: var(--bg-dark)
+        }
+
+/*==========================================================================================
+  CONTACT FOOTER
+==========================================================================================*/
+.contact-footer {
+    padding: 3rem 1rem;
+    text-align: center;
+    margin: 0
+}
+
+    .contact-footer .glass {
+        margin-top: .85rem
+    }
+
+    .contact-footer h2 {
+        font-family: var(--font-serif);
+        margin-bottom: .55rem;
+        font-size: 1.8rem
+    }
+
+    .contact-footer p {
+        margin: .3rem 0;
+        color: var(--text-light)
+    }
+
+/*==========================================================================================
+  AUTH PAGES (Register / Login) 
+==========================================================================================*/
+.auth-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 120px); /* below navbar */
+    padding: 2rem 1rem;
+}
+
+.auth-box {
+    max-width: 480px;
+    width: 100%
+}
+
+    .auth-box h2 {
+        font-family: var(--font-serif);
+        margin-bottom: .9rem;
+        text-align: center
+    }
+
+.form-control {
+    background: rgba(255,255,255,.08);
+    border: 1px solid var(--border-light);
+    color: #fff
+}
+
+    .form-control:focus {
+        background: rgba(255,255,255,.12);
+        border-color: var(--gold-dark);
+        color: #fff
+    }

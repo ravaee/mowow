@@ -1817,11 +1817,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Projects\\mowow\\website\\WebApp.csproj",
+      "projectUniqueName": "C:\\Projects\\mowow\\website\\WebApp.csproj",
       "projectName": "WebApp",
-      "projectPath": "c:\\Projects\\mowow\\website\\WebApp.csproj",
+      "projectPath": "C:\\Projects\\mowow\\website\\WebApp.csproj",
       "packagesPath": "C:\\Users\\MoRavaei\\.nuget\\packages\\",
-      "outputPath": "c:\\Projects\\mowow\\website\\obj\\",
+      "outputPath": "C:\\Projects\\mowow\\website\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

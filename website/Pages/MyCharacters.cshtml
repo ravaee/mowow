@@ -1,0 +1,131 @@
+@page
+@model MyCharactersModel
+@{
+    ViewData["Title"] = "My Characters";
+    Layout = "_Layout";
+}
+
+<div class="main-content container my-4">
+    <h2 class="text-center mb-2" style="font-family:var(--font-serif);">
+        My Characters
+    </h2>
+    <p class="text-center text-muted mb-4">
+        Quick glance at your heroes—click “Details” to expand for achievements &amp; reputations.
+    </p>
+
+    @if (!Model.Characters.Any())
+    {
+        <div class="alert alert-info glass text-center">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            You have no characters.
+        </div>
+    }
+    else
+    {
+        <div class="glass-table table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th style="width: 4%;">#</th>
+                        <th>Name</th>
+                        <th>Race</th>
+                        <th>Class</th>
+                        <th>Level</th>
+                        <th>Money</th>
+                        <th>XP</th>
+                        <th style="width: 8%;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Characters.Count; i++)
+                    {
+                        var c = Model.Characters[i];
+                        var detailId = $"detailRows{i}";
+                        <tr>
+                            <td>@(i + 1)</td>
+                            <td>
+                                <img src="~/images/races/@c.RaceImage"
+                                     alt="@c.RaceName"
+                                     class="avatar-sm" />
+                                @c.Name
+                            </td>
+                            <td class="text-capitalize">@c.RaceName</td>
+                            <td class="text-capitalize">@c.ClassName</td>
+                            <td>@c.Level</td>
+                            <td>
+                                <span class="coin gold">@c.Gold g</span>
+                                <span class="coin silver">@c.Silver s</span>
+                                <span class="coin copper">@c.Copper c</span>
+                            </td>
+                            <td>@c.XP</td>
+                            <td>
+                                <button class="btn-details"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#@detailId"
+                                        aria-expanded="false"
+                                        aria-controls="@detailId">
+                                    Details
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="collapse" id="@detailId">
+                            <td colspan="8" class="p-0">
+                                <div class="glass-detail row">
+                                    <div class="col-md-6">
+                                        <h6><i class="fas fa-medal me-1"></i>Achievements</h6>
+                                        @if (c.Achievements.Any())
+                                        {
+                                            <ul>
+                                                @foreach (var ach in c.Achievements.Take(5))
+                                                {
+                                                    <li>@ach.Date: #@ach.AchievementId</li>
+                                                }
+                                                @if (c.Achievements.Count > 5)
+                                                {
+                                                    <li class="text-muted">…+@((c.Achievements.Count - 5)) more</li>
+                                                }
+                                            </ul>
+                                        }
+                                        else
+                                        {
+                                            <p class="text-muted">None yet.</p>
+                                        }
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6><i class="fas fa-handshake-angle me-1"></i>Reputations</h6>
+                                        @if (c.Reputations.Any())
+                                        {
+                                            <ul>
+                                                @foreach (var rep in c.Reputations.Take(5))
+                                                {
+                                                    <li>Faction #@rep.Faction: Standing @rep.Standing</li>
+                                                }
+                                                @if (c.Reputations.Count > 5)
+                                                {
+                                                    <li class="text-muted">…+@((c.Reputations.Count - 5)) more</li>
+                                                }
+                                            </ul>
+                                        }
+                                        else
+                                        {
+                                            <p class="text-muted">None recorded.</p>
+                                        }
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="related-topics">
+            <h5>Related Topics</h5>
+            <a href="#">How to Level Faster</a>
+            <a href="#">Professions Guide</a>
+            <a href="#">Guild Management</a>
+            <a href="#">PvP Arenas</a>
+        </div>
+    }
+</div>

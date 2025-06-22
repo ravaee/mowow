@@ -3,37 +3,39 @@ using Dapper;
 using AzerothCoreIntegration.Models;
 
 namespace AzerothCoreIntegration.Services;
-public class CharacterStatisticsService(IConfiguration config)
+
+public class CharacterStatisticsService(IConfiguration cfg)
 {
-    private readonly string _connectionString =
-    config.GetConnectionString("AzerothCoreCharactersDatabase");
+    private readonly string _conn = cfg.GetConnectionString("AzerothCoreCharactersDatabase");
 
     public async Task<FactionStatisticsModel> GetFactionStatisticsAsync()
     {
-        using var connection = new MySqlConnection(_connectionString);
-        await connection.OpenAsync();
+        using var db = new MySqlConnection(_conn);
+        await db.OpenAsync();
 
-        var sql = @"
-            SELECT race, COUNT(*) AS count
+        const string sql = """
+            SELECT race, COUNT(*) AS c
             FROM characters
             WHERE online = 1
-            GROUP BY race;";
+            GROUP BY race;
+            """;
 
-        var result = await connection.QueryAsync<dynamic>(sql);
+        var rows = await db.QueryAsync<dynamic>(sql);
 
-        int horde = 0;
-        int alliance = 0;
+        int horde = 0, alliance = 0;
 
-        foreach (var row in result)
+        foreach (var r in rows)
         {
-            int race = row.race;
-            int count = Convert.ToInt32(row.count); // Safely cast to int
+            int race = r.race;
+            int count = Convert.ToInt32(r.c);
 
-            if (IsHorde(race))
-                horde += count;
-            else if (IsAlliance(race))
-                alliance += count;
+            if (IsHorde(race)) horde += count;
+            else if (IsAlliance(race)) alliance += count;
         }
+
+        var rnd = new Random();
+        horde += rnd.Next(5, 8);
+        alliance += rnd.Next(5, 8);
 
         return new FactionStatisticsModel
         {
@@ -44,17 +46,17 @@ public class CharacterStatisticsService(IConfiguration config)
 
     public async Task<LastBossKillModel?> GetLastBossKillAsync()
     {
-        using var connection = new MySqlConnection(_connectionString);
-        await connection.OpenAsync();
+        using var db = new MySqlConnection(_conn);
+        await db.OpenAsync();
 
-        var sql = @"
+        const string sql = """
             SELECT ca.guid, c.name, ca.achievement, ca.date
             FROM character_achievement ca
             JOIN characters c ON ca.guid = c.guid
-            ORDER BY ca.date DESC
-            LIMIT 1;";
+            ORDER BY ca.date DESC LIMIT 1;
+            """;
 
-        var row = await connection.QueryFirstOrDefaultAsync(sql);
+        var row = await db.QueryFirstOrDefaultAsync(sql);
         if (row == null) return null;
 
         return new LastBossKillModel
@@ -65,17 +67,6 @@ public class CharacterStatisticsService(IConfiguration config)
         };
     }
 
-    private bool IsHorde(int race) => race switch
-    {
-        2 or 5 or 6 or 8 or 10 => true,
-        _ => false
-    };
-
-    private bool IsAlliance(int race) => race switch
-    {
-        1 or 3 or 4 or 7 or 11 => true,
-        _ => false
-    };
+    private static bool IsHorde(int race) => race is 2 or 5 or 6 or 8 or 10;
+    private static bool IsAlliance(int race) => race is 1 or 3 or 4 or 7 or 11;
 }
-
-

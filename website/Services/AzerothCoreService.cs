@@ -3,7 +3,7 @@ using System.Text;
 using Dapper;
 using MySql.Data.MySqlClient;
 
-namespace WowWebsite.Data;
+namespace WebApp.Services;
 
 public class AzerothCoreService(IConfiguration cfg)
 {

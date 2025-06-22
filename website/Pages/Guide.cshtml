@@ -1,0 +1,73 @@
+﻿@page
+@model GuideModel
+@{
+    ViewData["Title"] = "Getting Started";
+}
+
+<section class="hero">
+    <div class="glass">
+        <h1>MoWow 3.3.5 – Starter Guide</h1>
+        <p class="lead">
+            Everything you need to jump into Wrath of the Lich King&nbsp;3.3.5 on our private realm.
+        </p>
+    </div>
+</section>
+
+<section class="stats-section">
+    <div class="glass">
+
+        <h2 style="font-family:var(--font-serif)">1. What is 3.3.5?</h2>
+        <p>
+            Patch&nbsp;3.3.5a is the final update of <strong>Wrath of the Lich King</strong>.
+            It contains the full Icecrown Citadel raid, the Ruby Sanctum, cross-server
+            dungeon finder and all class talents balanced for WotLK.
+        </p>
+
+        <h2 style="font-family:var(--font-serif)">2. Download the Game Client</h2>
+        <p>
+            Use our pre-patched, no-installer client (≈ 18&nbsp;GB).
+            <a class="btn-green" href="@Model.DownloadUrl" target="_blank">Download 3.3.5 Client</a>
+        </p>
+
+        <h2 style="font-family:var(--font-serif)">3. Realmlist.wtf</h2>
+        <p>
+            After the download finishes:
+        </p>
+        <ol>
+            <li>Open the game folder.</li>
+            <li>Go to <code>Data\enUS</code> (or your locale).</li>
+            <li>Open <code>realmlist.wtf</code> with Notepad.</li>
+            <li>
+                Replace the contents with<br />
+                <kbd>set&nbsp;realmlist&nbsp;@Model.RealmAddress</kbd>
+            </li>
+            <li>Save &amp; close.</li>
+        </ol>
+
+        <h2 style="font-family:var(--font-serif)">4. Create an Account</h2>
+        <p>
+            If you haven’t registered yet click the gold button:
+            <a asp-page="/Register" class="btn-gold">Create Account</a>
+            &nbsp;then log in with the solid green button on the navbar.
+        </p>
+
+        <h2 style="font-family:var(--font-serif)">5. Log In &amp; Play</h2>
+        <p>
+            Run <code>Wow.exe</code> (not the Launcher).
+            Enter the username and password you set on the website, pick the realm
+            <strong>MoWow 3.3.5</strong>, create a character and enjoy!
+        </p>
+    </div>
+</section>
+
+<section class="contact-footer">
+    <div class="glass">
+        <h2>Need Help?</h2>
+        <p>Email me: <a href="mailto:ravaeimohamad@gmail.com">ravaeimohamad@gmail.com</a></p>
+        <p>
+            Instagram – <a href="https://www.instagram.com/mohamad_ravaei/" target="_blank">mohamad_ravaei</a>
+            &nbsp;|&nbsp;
+            LinkedIn – <a href="https://www.linkedin.com/in/mohamad-ravaei/" target="_blank">Mohamad Ravaei</a>
+        </p>
+    </div>
+</section>

@@ -1,56 +1,200 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "AzerothCore Server Dashboard";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4 mb-4">AzerothCore Live Dashboard</h1>
+<main role="main">
 
-    <div class="alert alert-info">
-        <h5>Realmlist Info</h5>
-        <p>Set your <code>realmlist.wtf</code> to:</p>
-        <pre>set realmlist @Model.RealmAddress</pre>
-    </div>
+    <!-- ░░ HERO ░░ -->
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <section class="hero">
+            <div class="glass">
+                <h1>MoWow 3.3.5</h1>
+                <p class="lead">
+                    A private Wrath of the Lich King 3.3.5 server I built just for fun. Be in touch!
+                </p>
+                <p>
+                    Instagram:
+                    <a href="https://www.instagram.com/mohamad_ravaei/" target="_blank">mohamad_ravaei</a><br />
+                    LinkedIn:
+                    <a href="https://www.linkedin.com/in/mohamad-ravaei/" target="_blank">Mohamad Ravaei</a><br />
+                    Email:
+                    <a href="mailto:ravaeimohamad@gmail.com">ravaeimohamad@gmail.com</a>
+                </p>
 
-    <div class="row justify-content-center my-4">
-        <div class="col-md-4">
-            <div class="card p-3">
-                <h5>Server Stats</h5>
-                <p><strong>Online Players:</strong> @Model.ServerInfo?.ConnectedPlayers</p>
-                <p><strong>Uptime:</strong> @Model.ServerInfo?.Uptime</p>
+                <div class="hero-links">
+                    <a asp-page="/Register" class="hero-btn register">Create Account</a>
+                    <a asp-page="/Login" class="hero-btn login">Login</a>
+                </div>
             </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card p-3">
-                <h5>Faction Distribution</h5>
-                <p><strong>Horde:</strong> @Model.FactionStats?.HordePlayers</p>
-                <p><strong>Alliance:</strong> @Model.FactionStats?.AlliancePlayers</p>
+        </section>
+    }
+    else
+    {
+        <section class="hero">
+            <div class="glass">
+                <h2>Welcome, @User.Identity.Name!</h2>
+                <p class="lead">Here’s your dashboard—view your characters, server stats, and more.</p>
             </div>
-        </div>
-    </div>
+        </section>
+    }
 
-    <div class="row justify-content-center my-4">
-        <div class="col-md-8">
-            <div class="card p-3">
-                <h5>Last Boss Kill</h5>
-                @if (Model.LastBossKill != null)
+    <!-- ░░ MY CHARACTERS ░░ -->
+    @if (User.Identity.IsAuthenticated)
+    {
+        <section class="characters-section">
+            <div class="glass">
+                <h3 style="font-family:var(--font-serif)">Your Characters</h3>
+
+                @if (!Model.Characters.Any())
                 {
-                    <p><strong>Player:</strong> @Model.LastBossKill.CharacterName</p>
-                    <p><strong>Boss/Achievement:</strong> @Model.LastBossKill.AchievementName</p>
-                    <p><strong>Date:</strong> @Model.LastBossKill.Date</p>
+                    <div class="alert alert-info glass text-center">
+                        <i class="fas fa-exclamation-circle me-2"></i>No characters yet.
+                    </div>
                 }
                 else
                 {
-                    <p>No boss kills yet.</p>
+                    <div class="glass-table table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Race</th>
+                                    <th>Class</th>
+                                    <th>Level</th>
+                                    <th>Money</th>
+                                    <th>XP</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (var i = 0; i < Model.Characters.Count; i++)
+                                {
+                                    var c = Model.Characters[i];
+                                    var detailId = $"detailRows{i}";
+                                    <tr>
+                                        <td>@(i + 1)</td>
+                                        <td>
+                                            <img src="~/images/races/@c.RaceImage" class="avatar-sm" alt="@c.RaceName" />
+                                            @c.Name
+                                        </td>
+                                        <td>@c.RaceName</td>
+                                        <td>@c.ClassName</td>
+                                        <td>@c.Level</td>
+                                        <td>
+                                            <span class="coin gold">@c.Gold g</span>
+                                            <span class="coin silver">@c.Silver s</span>
+                                            <span class="coin copper">@c.Copper c</span>
+                                        </td>
+                                        <td>@c.XP</td>
+                                        <td>
+                                            <button class="btn-details"
+                                                    type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#@detailId"
+                                                    aria-expanded="false"
+                                                    aria-controls="@detailId">
+                                                Details
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="collapse" id="@detailId">
+                                        <td colspan="8" class="p-0">
+                                            <div class="glass-detail row">
+                                                <div class="col-md-6">
+                                                    <h6><i class="fas fa-medal me-1"></i>Achievements</h6>
+                                                    @if (c.Achievements.Any())
+                                                    {
+                                                        <ul>
+                                                            @foreach (var ach in c.Achievements.Take(5))
+                                                            {
+                                                                <li>@ach.Date: #@ach.AchievementId</li>
+                                                            }
+                                                            @if (c.Achievements.Count > 5)
+                                                            {
+                                                                <li class="text-muted">…+@((c.Achievements.Count - 5)) more</li>
+                                                            }
+                                                        </ul>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p class="text-muted">None yet.</p>
+                                                    }
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h6><i class="fas fa-handshake-angle me-1"></i>Reputations</h6>
+                                                    @if (c.Reputations.Any())
+                                                    {
+                                                        <ul>
+                                                            @foreach (var rep in c.Reputations.Take(5))
+                                                            {
+                                                                <li>Faction #@rep.Faction: Standing @rep.Standing</li>
+                                                            }
+                                                            @if (c.Reputations.Count > 5)
+                                                            {
+                                                                <li class="text-muted">…+@((c.Reputations.Count - 5)) more</li>
+                                                            }
+                                                        </ul>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p class="text-muted">None recorded.</p>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 }
             </div>
-        </div>
-    </div>
+        </section>
+    }
 
-    <div class="mb-5">
-        <a class="btn btn-success mx-2" asp-page="/Register">Register Account</a>
-        <a class="btn btn-outline-primary mx-2" asp-page="/ServerInfo">Server Info</a>
-    </div>
-</div>
+    <!-- ░░ WORLD STATS ░░ -->
+    <section class="stats-section">
+        <div class="glass">
+            <div class="card-header"><i class="fas fa-globe me-2"></i>World Stats</div>
+
+            <div class="stats-grid">
+                <div class="stat-item"><h6><i class="fas fa-network-wired me-1"></i>Realmlist</h6><p><code>@Model.RealmAddress</code></p></div>
+                <div class="stat-item"><h6><i class="fas fa-user-friends me-1"></i>Players Online</h6><p>@Model.ServerInfo?.ConnectedPlayers</p></div>
+                <div class="stat-item"><h6><i class="fas fa-fist-raised me-1"></i>Horde</h6><p>@Model.FactionStats?.HordePlayers</p></div>
+                <div class="stat-item"><h6><i class="fas fa-shield-alt me-1"></i>Alliance</h6><p>@Model.FactionStats?.AlliancePlayers</p></div>
+                <div class="stat-item">
+                    <h6><i class="fas fa-skull-crossbones me-1"></i>Last Kill</h6>
+                    @if (Model.LastBossKill != null)
+                    {
+                        <p>@Model.LastBossKill.CharacterName<br /><small>@Model.LastBossKill.Date</small></p>
+                    }
+                    else
+                    {
+                        <p>No Boss killed yet</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ░░ CONTACT ░░ -->
+    <section class="contact-footer">
+        <div class="glass">
+            <h2>Contact Me</h2>
+            <p>You can talk to me and we can play together!</p>
+            <p>Email: <a href="mailto:ravaeimohamad@gmail.com">ravaeimohamad@gmail.com</a></p>
+            <p>
+                Instagram –
+                <a href="https://www.instagram.com/mohamad_ravaei/" target="_blank">mohamad_ravaei</a>
+                &nbsp;|&nbsp;
+                LinkedIn –
+                <a href="https://www.linkedin.com/in/mohamad-ravaei/" target="_blank">Mohamad Ravaei</a>
+            </p>
+        </div>
+    </section>
+
+</main>
