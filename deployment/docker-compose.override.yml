@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  ac-worldserver:
+    volumes:
+      - ./conf/worldserver.conf:/azerothcore/env/dist/etc/worldserver.conf
+  website:
+    build:
+      context: ../../website
+      dockerfile: Dockerfile
+    env_file:
+      - ./website.env
+    ports:
+      - "8080:8080"
+    networks:
+      - acnet
+    depends_on:
+      - ac-database
+
+networks:
+  acnet:
+    external: true
