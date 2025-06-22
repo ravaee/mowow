@@ -1,0 +1,135 @@
+x-networks: &networks
+  networks:
+    - ac-network
+
+x-ac-shared-conf: &ac-shared-conf
+  <<: *networks
+  working_dir: /azerothcore
+
+
+services:
+  ac-database:
+    <<: *networks
+    image: mysql:8.0
+    restart: unless-stopped
+    cap_add:
+      - SYS_NICE
+    ports:
+      - "63306:3306"                # <-- CHANGE HERE if needed
+    expose:
+      - 3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=password     # <-- CHANGE HERE if needed
+    volumes:
+      - ac-database:/var/lib/mysql
+      - ./mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p=password"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  ac-worldserver:
+    container_name: acore-docker-ac-worldserver-1
+    <<: *ac-shared-conf
+    stdin_open: true
+    tty: true
+    cap_add:
+      - SYS_NICE
+    image: acore/ac-wotlk-worldserver:master         # <-- CHANGE TAG HERE if needed
+    restart: unless-stopped
+    privileged: true
+    user: acore                                      # <-- CHANGE HERE if needed
+    ports:
+      - "8085:8085"
+      - "7878:7878"
+    expose:
+      - 8085
+    volumes:
+      - ./scripts/lua:/azerothcore/env/dist/bin/lua_scripts/scripts
+      - "ac-client-data:/azerothcore/env/dist/data:ro"
+      - ./conf/worldserver.conf:/azerothcore/env/dist/etc/worldserver.conf
+    environment:
+      AC_DATA_DIR: "/azerothcore/env/dist/data"
+      AC_LOGS_DIR: "/azerothcore/env/dist/logs"
+      AC_LOGIN_DATABASE_INFO: "ac-database;3306;root;password;acore_auth"
+      AC_WORLD_DATABASE_INFO: "ac-database;3306;root;password;acore_world"
+      AC_CHARACTER_DATABASE_INFO: "ac-database;3306;root;password;acore_characters"
+      AC_CLOSE_IDLE_CONNECTIONS: "0"
+    depends_on:
+      ac-eluna-ts-dev:
+        condition: service_started
+      ac-client-data:
+        condition: service_completed_successfully
+      ac-db-import:
+        condition: service_completed_successfully
+
+  ac-authserver:
+    <<: *ac-shared-conf
+    tty: true
+    image: acore/ac-wotlk-authserver:master         # <-- CHANGE TAG HERE if needed
+    restart: unless-stopped
+    ports:
+      - "3724:3724"
+    expose:
+      - 3724
+    environment:
+      AC_LOGS_DIR: "/azerothcore/env/dist/logs"
+      AC_TEMP_DIR: "/azerothcore/env/dist/temp"
+      AC_LOGIN_DATABASE_INFO: "ac-database;3306;root;password;acore_auth"
+      AC_SQLDRIVER_LOG_FILE: "SQLDriver.log"
+      AC_SQLDRIVER_QUERY_LOGGING: "1"
+    depends_on:
+      ac-db-import:
+        condition: service_completed_successfully
+
+  ac-eluna-ts-dev:
+    image: acore/eluna-ts:master
+    command: sh -c "cd /eluna-ts/modules && touch index.ts && npm install && cd /eluna-ts && npm run dev"
+    healthcheck:
+      test: sh -c "cd /eluna-ts/modules/eluna-ts && npm run build:lib && npm run build"
+      timeout: 60s
+      retries: 10
+      interval: 5s
+      start_period: 10s
+    restart: unless-stopped
+    volumes:
+      - ./scripts/typescript:/eluna-ts/modules
+      - ./scripts/lua:/eluna-ts/dist/
+
+  ac-client-data:
+    <<: *networks
+    image: acore/ac-wotlk-client-data:master         # <-- CHANGE TAG HERE if needed
+    volumes:
+      - "ac-client-data:/azerothcore/env/dist/data"
+
+  ac-db-import:
+    <<: *ac-shared-conf
+    image: acore/ac-wotlk-db-import:master
+    environment:
+      AC_DISABLE_INTERACTIVE: "1"
+      AC_DATA_DIR: "/azerothcore/env/dist/data"
+      AC_LOGS_DIR: "/azerothcore/env/dist/logs"
+      AC_LOGIN_DATABASE_INFO: "ac-database;3306;root;password;acore_auth"
+      AC_WORLD_DATABASE_INFO: "ac-database;3306;root;password;acore_world"
+      AC_CHARACTER_DATABASE_INFO: "ac-database;3306;root;password;acore_characters"
+      AC_CLOSE_IDLE_CONNECTIONS: "0"
+    depends_on:
+      ac-database:
+        condition: service_healthy
+
+  phpmyadmin:
+    <<: *networks
+    image: phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_ARBITRARY=1
+    profiles: []
+
+volumes:
+  ac-database:
+  ac-client-data:
+
+networks:
+  ac-network:
