@@ -5,11 +5,9 @@ services:
     volumes:
       - ./conf/worldserver.conf:/azerothcore/env/dist/etc/worldserver.conf
   website:
-    build:
-      context: ../../website
-      dockerfile: Dockerfile
+    image: website:latest
     env_file:
-      - ./website.env
+      - ./dev.env
     ports:
       - "8080:8080"
     networks:
