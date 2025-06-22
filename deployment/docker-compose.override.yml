@@ -4,13 +4,3 @@ services:
   ac-worldserver:
     volumes:
       - ./conf/worldserver.conf:/azerothcore/env/dist/etc/worldserver.conf
-  website:
-    image: website:latest
-    env_file:
-      - ./dev.env
-    ports:
-      - "8081:8080"
-    networks:
-      - acnet
-    depends_on:
-      - ac-database
