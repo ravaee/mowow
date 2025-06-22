@@ -121,8 +121,16 @@ services:
 
   website:
     image: website:latest
-    env_file:
-      - ./dev.env
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      AzerothCore__SoapUrl: ${AZEROTHCORE_SOAPURL}
+      AzerothCore__SoapUser: ${AZEROTHCORE_SOAPUSER}
+      AzerothCore__SoapPassword: ${AZEROTHCORE_SOAPPASSWORD}
+      AzerothCore__RealmAddress: ${AZEROTHCORE_REALMADDRESS}
+      ConnectionStrings__AzerothCoreAuthDatabase: ${AZEROTHCOREAUTHDATABASE}
+      ConnectionStrings__AzerothCoreCharactersDatabase: ${AZEROTHCORECHARACTERSDATABASE}
+      CaptchaSecret: ${CAPTCHASECRET}
+      DownloadGameUrl: ${DOWNLOADGAMEURL}
     ports:
       - "8081:8080"
     networks:
