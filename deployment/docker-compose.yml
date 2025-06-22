@@ -128,6 +128,7 @@ services:
     networks:
       - ac-network
     depends_on:
+      - ac-authserver
       - ac-database
 
   # phpmyadmin:
