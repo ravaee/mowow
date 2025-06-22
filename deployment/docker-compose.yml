@@ -121,6 +121,8 @@ services:
 
   website:
     image: website:latest
+    env_file:
+      - ./dev.env
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       AzerothCore__SoapUrl: ${AZEROTHCORE_SOAPURL}
