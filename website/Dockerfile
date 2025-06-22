@@ -10,7 +10,7 @@ RUN dotnet restore ./website.sln
 # Copy everything else and build
 COPY . .
 WORKDIR /src
-RUN dotnet publish -c Release -o /app --no-restore
+RUN dotnet publish WebApp.csproj -c Release -o /app --no-restore
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
