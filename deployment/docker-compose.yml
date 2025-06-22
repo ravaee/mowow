@@ -118,6 +118,18 @@ services:
       ac-database:
         condition: service_healthy
 
+
+  website:
+    image: website:latest
+    env_file:
+      - ./dev.env
+    ports:
+      - "8081:8080"
+    networks:
+      - ac-network
+    depends_on:
+      - ac-database
+
   # phpmyadmin:
   #   <<: *networks
   #   image: phpmyadmin
