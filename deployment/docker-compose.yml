@@ -121,18 +121,17 @@ services:
 
   website:
     image: website:latest
-    env_file:
-      - ./dev.env
     environment:
-      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
-      AzerothCore__SoapUrl: ${AZEROTHCORE_SOAPURL}
-      AzerothCore__SoapUser: ${AZEROTHCORE_SOAPUSER}
-      AzerothCore__SoapPassword: ${AZEROTHCORE_SOAPPASSWORD}
-      AzerothCore__RealmAddress: ${AZEROTHCORE_REALMADDRESS}
-      ConnectionStrings__AzerothCoreAuthDatabase: ${AZEROTHCOREAUTHDATABASE}
-      ConnectionStrings__AzerothCoreCharactersDatabase: ${AZEROTHCORECHARACTERSDATABASE}
-      CaptchaSecret: ${CAPTCHASECRET}
-      DownloadGameUrl: ${DOWNLOADGAMEURL}
+      ASPNETCORE_ENVIRONMENT: Development
+      DETAILED_ERRORS: true
+      AzerothCore__SoapUrl: http://ac-worldserver:7878/
+      AzerothCore__SoapUser: soapuser
+      AzerothCore__SoapPassword: soappassword
+      AzerothCore__RealmAddress: ac-authserver
+      ConnectionStrings__AzerothCoreAuthDatabase: server=ac-database;port=3306;database=acore_auth;user id=root;password=password;
+      ConnectionStrings__AzerothCoreCharactersDatabase: server=ac-database;port=3306;database=acore_characters;user id=root;password=password;
+      CaptchaSecret: YOUR_SECRET_KEY
+      DownloadGameUrl: https://example.com/your-3.3.5-client.zip
     ports:
       - "8081:8080"
     networks:
