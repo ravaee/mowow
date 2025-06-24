@@ -1,4 +1,4 @@
-# AzerothCore CMS Quick Start Guide
+# CMS Quick Start Guide
 
 ## 1. Post-Initialization Manual Setup
 
@@ -26,8 +26,6 @@ account set gmlevel soapuser 3 -1
 
 ```sh
 docker compose cp ac-worldserver:/azerothcore/env/dist/etc/worldserver.conf conf/worldserver.conf
-docker compose cp ac-worldserver:/azerothcore/env/dist/etc/authserver.conf conf/authserver.conf
-docker compose cp ac-worldserver:/azerothcore/env/dist/etc/dbimport.conf conf/dbimport.conf
 ```
 
 ### 2.2 Mount Configs via `docker-compose.override.yml` (if needed)
@@ -90,21 +88,7 @@ docker compose down
 docker compose up
 ```
 
-> The CMS will automatically recreate the `siteUsers` table.
 
-### 4.3 Full MySQL Backup & Restore
-
-**Backup:**
-```sh
-docker exec -i ac-database mysqldump -uroot -ppassword --all-databases > full-backup.sql
-```
-
-**Restore:**
-```sh
-cat full-backup.sql | docker exec -i ac-database mysql -uroot -ppassword
-```
-
----
 
 ## 5. Deployment Notes for Production
 
