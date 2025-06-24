@@ -1,4 +1,4 @@
-# CMS Quick Start Guide
+# MoWow CMS A CMS Quick For Azerothcore 
 
 ## 1. Post-Initialization Manual Setup
 
